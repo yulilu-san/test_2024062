@@ -126,10 +126,13 @@ def calculate_triangle_area(keypoints, scores):
     if (scores[left_eye_index] > keypoint_score_th and
         scores[right_eye_index] > keypoint_score_th and
         scores[nose_index] > keypoint_score_th):
-        left_eye = keypoints[0][left_eye_index]
-        right_eye = keypoints[0][right_eye_index]
-        nose = keypoints[0][nose_index]
-
+        # left_eye = keypoints[0][left_eye_index]
+        # right_eye = keypoints[0][right_eye_index]
+        # nose = keypoints[0][nose_index]
+        left_eye = keypoints[left_eye_index]
+        right_eye = keypoints[right_eye_index]
+        nose = keypoints[nose_index]
+        
         # 三角形の3辺の長さを計算
         side1 = math.sqrt((left_eye[0] - right_eye[0])**2 + (left_eye[1] - right_eye[1])**2)
         side2 = math.sqrt((left_eye[0] - nose[0])**2 + (left_eye[1] - nose[1])**2)

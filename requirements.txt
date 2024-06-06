@@ -1,7 +1,5 @@
-streamlit==1.34.0
-streamlit-webrtc==0.47.7
-opencv-python-headless==4.9.0.80
-onnxruntime==1.17.3
-av==11.0.0
-numpy==1.26.4
-matplotlib==3.8.4
+streamlit==1.10.0
+streamlit-webrtc==0.31.7
+opencv-python-headless
+onnxruntime
+av

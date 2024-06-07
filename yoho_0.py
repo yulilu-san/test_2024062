@@ -10,7 +10,7 @@ class VideoProcessor(VideoProcessorBase):
         self.frames = []
         self.timestamps = []
         self.capture_flag = False
-        self.capture_interval = 1  # キャプチャ間隔（秒）
+        self.capture_interval = 1  # capture interval in seconds
         self.last_capture_time = None
 
     def recv(self, frame):
@@ -22,7 +22,7 @@ class VideoProcessor(VideoProcessorBase):
                 self.timestamps.append(datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
                 self.last_capture_time = current_time
                 if len(self.frames) >= 3:
-                    self.capture_flag = False  # 3フレーム後にキャプチャを停止
+                    self.capture_flag = False  # Stop capturing after 3 frames
         return av.VideoFrame.from_ndarray(img, format="bgr24")
 
     def capture_frames(self):
@@ -31,7 +31,7 @@ class VideoProcessor(VideoProcessorBase):
         self.capture_flag = True
         self.last_capture_time = None
         while self.capture_flag:
-            time.sleep(0.1)  # 短いスリープで制御を渡す
+            time.sleep(0.1)  # short sleep to yield control
 
     def get_frames(self):
         return self.frames, self.timestamps
@@ -68,78 +68,6 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-
-# import streamlit as st
-# from streamlit_webrtc import webrtc_streamer, VideoProcessorBase, WebRtcMode, RTCConfiguration
-# import av
-# import threading
-# from datetime import datetime
-# import time
-
-# class VideoProcessor(VideoProcessorBase):
-#     def __init__(self):
-#         self.frames = []
-#         self.timestamps = []
-#         self.capture_flag = False
-#         self.capture_interval = 1  # capture interval in seconds
-#         self.last_capture_time = None
-
-#     def recv(self, frame):
-#         img = frame.to_ndarray(format="bgr24")
-#         if self.capture_flag:
-#             current_time = time.time()
-#             if self.last_capture_time is None or current_time - self.last_capture_time >= self.capture_interval:
-#                 self.frames.append(img)
-#                 self.timestamps.append(datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
-#                 self.last_capture_time = current_time
-#                 if len(self.frames) >= 3:
-#                     self.capture_flag = False  # Stop capturing after 3 frames
-#         return av.VideoFrame.from_ndarray(img, format="bgr24")
-
-#     def capture_frames(self):
-#         self.frames = []
-#         self.timestamps = []
-#         self.capture_flag = True
-#         self.last_capture_time = None
-#         while self.capture_flag:
-#             time.sleep(0.1)  # short sleep to yield control
-
-#     def get_frames(self):
-#         return self.frames, self.timestamps
-
-# def main():
-#     st.title("WebRTC Photo Capture")
-
-#     rtc_config = RTCConfiguration(
-#         {"iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]}
-#     )
-
-#     ctx = webrtc_streamer(
-#         key="example",
-#         mode=WebRtcMode.SENDRECV,
-#         rtc_configuration=rtc_config,
-#         video_processor_factory=VideoProcessor,
-#         media_stream_constraints={"video": True, "audio": False},
-#     )
-
-#     if ctx.video_processor:
-#         if st.button("Start Capture"):
-#             capture_thread = threading.Thread(target=ctx.video_processor.capture_frames)
-#             capture_thread.start()
-
-#             # スレッドが終了するのを待つ
-#             capture_thread.join()
-
-#             # キャプチャしたフレームを取得して表示
-#             frames, timestamps = ctx.video_processor.get_frames()
-#             if frames:
-#                 st.write("Captured Images:")
-#                 for idx, (frame, timestamp) in enumerate(zip(frames, timestamps)):
-#                     st.image(frame, caption=f"Captured Image {idx + 1} at {timestamp}")
-
-# if __name__ == "__main__":
-#     main()
 
 
 
